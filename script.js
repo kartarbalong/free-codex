@@ -154,10 +154,16 @@ function render() {
   const openIds = new Set(
     Array.from(listEl.querySelectorAll(".card[open]")).map((node) => node.getAttribute("data-id"))
   );
+  const nowMs = Date.now();
+  const sortedItems = [...state.items].sort((a, b) => {
+    const aRemaining = getLiveItemState(a, nowMs).remainingMs;
+    const bRemaining = getLiveItemState(b, nowMs).remainingMs;
+    return aRemaining - bRemaining;
+  });
 
-  listEl.innerHTML = state.items
+  listEl.innerHTML = sortedItems
     .map((item) => {
-      const live = getLiveItemState(item);
+      const live = getLiveItemState(item, nowMs);
       const countdown = formatCountdown(live.remainingMs);
       const sliderPercent = Math.round(live.currentPercent);
       const isOpen = openIds.has(item.id) ? "open" : "";
