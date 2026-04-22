@@ -237,6 +237,7 @@ function updateCountdownLabelsOnly() {
     const summaryProgressFill = card.querySelector("[data-role='summary-progress-fill']");
     const tokenNowEl = card.querySelector("[data-role='token-now']");
     const tokenRateEl = card.querySelector("[data-role='token-rate']");
+    const isSliderActive = slider instanceof HTMLInputElement && document.activeElement === slider;
 
     countdownEl.textContent = countdown.text;
     countdownEl.classList.remove("ok", "expired");
@@ -246,7 +247,7 @@ function updateCountdownLabelsOnly() {
       countdownSummaryEl.classList.remove("ok", "expired");
       countdownSummaryEl.classList.add(countdown.className);
     }
-    if (slider instanceof HTMLInputElement) {
+    if (slider instanceof HTMLInputElement && !isSliderActive) {
       slider.value = String(Math.round(live.currentPercent));
     }
     if (limitLabel) {
@@ -385,7 +386,34 @@ listEl.addEventListener("input", (event) => {
     if (!Number.isFinite(numeric)) {
       return;
     }
-    updateItem(id, (item) => ({ ...item, limitPercent: clamp(numeric, 0, 100), lastUsed: Date.now() }));
+    const idx = state.items.findIndex((item) => item.id === id);
+    if (idx === -1) {
+      return;
+    }
+
+    state.items[idx] = normalizeItem({
+      ...state.items[idx],
+      limitPercent: clamp(numeric, 0, 100),
+      lastUsed: Date.now()
+    });
+    saveItems();
+
+    const currentCard = target.closest(".card");
+    if (!currentCard) {
+      return;
+    }
+    const limitLabel = currentCard.querySelector("[data-role='limit-label']");
+    const limitSummary = currentCard.querySelector("[data-role='limit-summary']");
+    const summaryProgressFill = currentCard.querySelector("[data-role='summary-progress-fill']");
+    if (limitLabel) {
+      limitLabel.textContent = `${clamp(numeric, 0, 100)}%`;
+    }
+    if (limitSummary) {
+      limitSummary.textContent = `${clamp(numeric, 0, 100)}%`;
+    }
+    if (summaryProgressFill) {
+      summaryProgressFill.style.width = `${clamp(numeric, 0, 100)}%`;
+    }
   }
 });
 
