@@ -1,14 +1,14 @@
 :root {
-  --bg: #f3f7f4;
-  --panel: #ffffff;
-  --text: #13281d;
-  --muted: #4f6257;
-  --accent: #0b8a4b;
-  --accent-soft: #daf5e7;
-  --danger: #b92e34;
-  --border: #d2e1d8;
-  --shadow: 0 12px 24px rgba(12, 48, 30, 0.08);
-  --radius: 14px;
+  --bg-a: #ffd84d;
+  --bg-b: #7fd7ff;
+  --panel: #fff8f1;
+  --panel-alt: #ffffff;
+  --ink: #161616;
+  --accent: #ff6b39;
+  --accent-2: #00c56f;
+  --danger: #ff2f52;
+  --border: 3px solid var(--ink);
+  --shadow-hard: 6px 6px 0 #161616;
 }
 
 * {
@@ -17,42 +17,64 @@
 
 body {
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: radial-gradient(circle at top right, #dff3e9, var(--bg));
-  color: var(--text);
   min-height: 100vh;
+  color: var(--ink);
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+  background:
+    linear-gradient(135deg, transparent 24px, rgba(0, 0, 0, 0.07) 24px, rgba(0, 0, 0, 0.07) 28px, transparent 28px) 0 0 / 44px 44px,
+    linear-gradient(145deg, var(--bg-a), var(--bg-b));
 }
 
 .app-shell {
-  width: min(100%, 420px);
+  width: min(100%, 470px);
   margin: 0 auto;
-  padding: 20px 14px 30px;
+  padding: 18px 14px 34px;
+}
+
+.app-header {
+  background: var(--panel-alt);
+  border: var(--border);
+  box-shadow: var(--shadow-hard);
+  padding: 14px;
+  transform: rotate(-0.7deg);
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-family: "Bricolage Grotesque", "Arial Black", sans-serif;
+  font-size: 1.62rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
 }
 
 .app-header p {
   margin: 6px 0 0;
-  color: var(--muted);
-  font-size: 0.92rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.add-panel,
+.card,
+.settings-menu > summary {
+  background: var(--panel);
+  border: var(--border);
+  box-shadow: var(--shadow-hard);
 }
 
 .add-panel {
-  margin-top: 16px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 12px;
+  margin-top: 18px;
+  padding: 14px;
 }
 
 .add-panel label {
-  display: block;
-  font-weight: 600;
+  display: inline-block;
   margin-bottom: 8px;
+  padding: 2px 8px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  background: #fff;
+  border: 2px solid var(--ink);
 }
 
 .add-row {
@@ -64,25 +86,47 @@ input[type="email"],
 input[type="text"],
 input[type="number"] {
   width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 3px solid var(--ink);
+  border-radius: 0;
   padding: 10px;
   font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: #fff;
+  outline: none;
+}
+
+input[type="email"]:focus,
+input[type="text"]:focus,
+input[type="number"]:focus {
+  box-shadow: 4px 4px 0 var(--accent);
 }
 
 button {
-  border: none;
-  border-radius: 10px;
+  border: 3px solid var(--ink);
+  border-radius: 0;
   background: var(--accent);
-  color: #fff;
+  color: #111;
   padding: 10px 12px;
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: 0.01em;
   cursor: pointer;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+button:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
 }
 
 button.secondary {
-  background: var(--accent-soft);
-  color: var(--text);
+  background: #00d9ff;
 }
 
 button:disabled {
@@ -92,17 +136,10 @@ button:disabled {
 
 .email-list {
   list-style: none;
-  margin: 14px 0 0;
+  margin: 16px 0 0;
   padding: 0;
   display: grid;
-  gap: 10px;
-}
-
-.card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  gap: 12px;
 }
 
 .card-summary {
@@ -110,8 +147,9 @@ button:disabled {
   cursor: pointer;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
+  gap: 10px;
   padding: 12px;
+  background: #fff;
 }
 
 .card-summary::-webkit-details-marker {
@@ -119,15 +157,20 @@ button:disabled {
 }
 
 .card-summary::after {
-  content: "v";
-  font-size: 0.8rem;
-  color: var(--muted);
+  content: "+";
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--ink);
+  font-size: 0.95rem;
+  font-weight: 900;
   grid-column: 2 / 3;
   justify-self: end;
 }
 
 .card[open] .card-summary::after {
-  content: "^";
+  content: "-";
 }
 
 .card-summary-email {
@@ -146,20 +189,18 @@ button:disabled {
 }
 
 .summary-percent {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--text);
-  background: #eef5f1;
-  border: 1px solid var(--border);
-  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: #ffdf5d;
+  border: 2px solid var(--ink);
   padding: 2px 8px;
 }
 
 .summary-progress {
   grid-column: 1 / 3;
-  height: 8px;
-  border-radius: 999px;
-  background: #e6efe9;
+  height: 12px;
+  border: 2px solid var(--ink);
+  background: #fff;
   overflow: hidden;
 }
 
@@ -167,13 +208,20 @@ button:disabled {
   display: block;
   height: 100%;
   width: 0;
-  background: linear-gradient(90deg, #35b26f, #0b8a4b);
-  transition: width 0.25s ease;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--accent-2),
+    var(--accent-2) 8px,
+    #21ffa4 8px,
+    #21ffa4 16px
+  );
+  transition: width 0.22s ease;
 }
 
 .card-body {
-  border-top: 1px dashed var(--border);
+  border-top: 3px dashed var(--ink);
   padding: 12px;
+  background: #fff8ed;
 }
 
 .card-top {
@@ -190,43 +238,49 @@ button:disabled {
 }
 
 .card-meta {
-  margin: 6px 0 0;
-  color: var(--muted);
+  margin: 8px 0 0;
   font-size: 0.82rem;
+  font-weight: 600;
 }
 
 .status {
-  font-weight: 700;
-  font-size: 0.92rem;
+  font-weight: 800;
+  font-size: 0.86rem;
+  border: 2px solid var(--ink);
+  padding: 2px 8px;
+  background: #fff;
 }
 
 .status.ok {
-  color: var(--accent);
+  color: var(--ink);
+  background: #b2ff95;
 }
 
 .status.expired {
-  color: var(--danger);
+  color: #fff;
+  background: var(--danger);
 }
 
 .control-row {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 12px;
   flex-wrap: wrap;
 }
 
 .mode-tag {
   display: inline-block;
-  margin-top: 8px;
+  margin-top: 10px;
   padding: 4px 8px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  font-size: 0.78rem;
-  font-weight: 600;
+  border: 2px solid var(--ink);
+  background: #ffc2f2;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .slider-group {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .slider-row {
@@ -239,48 +293,53 @@ input[type="range"] {
   width: 100%;
   touch-action: pan-x;
   -webkit-tap-highlight-color: transparent;
+  accent-color: var(--accent);
 }
 
 .range-label {
-  min-width: 46px;
+  min-width: 52px;
   text-align: right;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .empty-state {
-  margin-top: 14px;
+  margin-top: 16px;
   text-align: center;
-  color: var(--muted);
+  font-weight: 700;
+  border: var(--border);
+  background: #fff;
+  box-shadow: var(--shadow-hard);
+  padding: 12px;
 }
 
 .token-panel {
   margin-top: 10px;
+  background: #e2fff0;
 }
 
 .token-stats {
   margin-top: 10px;
-  border-top: 1px dashed var(--border);
+  border-top: 3px dashed var(--ink);
   padding-top: 8px;
 }
 
 .token-stats p {
   margin: 6px 0;
   font-size: 0.92rem;
+  font-weight: 700;
 }
 
 .settings-menu {
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .settings-menu > summary {
   list-style: none;
   cursor: pointer;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
   padding: 12px;
-  font-weight: 700;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: #ffffff;
 }
 
 .settings-menu > summary::-webkit-details-marker {
@@ -288,14 +347,14 @@ input[type="range"] {
 }
 
 .settings-menu > summary::after {
-  content: "v";
+  content: "+";
   float: right;
-  font-size: 0.8rem;
-  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 900;
 }
 
 .settings-menu[open] > summary::after {
-  content: "^";
+  content: "-";
 }
 
 @media (max-width: 360px) {
@@ -307,5 +366,9 @@ input[type="range"] {
 
   .range-label {
     text-align: left;
+  }
+
+  button {
+    width: 100%;
   }
 }
