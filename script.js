@@ -11,6 +11,7 @@ const state = {
     weeklyTokens: DEFAULT_WEEKLY_TOKENS
   }
 };
+const draggingLimitIds = new Set();
 
 const listEl = document.getElementById("email-list");
 const emptyStateEl = document.getElementById("empty-state");
@@ -237,7 +238,8 @@ function updateCountdownLabelsOnly() {
     const summaryProgressFill = card.querySelector("[data-role='summary-progress-fill']");
     const tokenNowEl = card.querySelector("[data-role='token-now']");
     const tokenRateEl = card.querySelector("[data-role='token-rate']");
-    const isSliderActive = slider instanceof HTMLInputElement && document.activeElement === slider;
+    const isDragging = id ? draggingLimitIds.has(id) : false;
+    const isSliderActive = slider instanceof HTMLInputElement && (document.activeElement === slider || isDragging);
 
     countdownEl.textContent = countdown.text;
     countdownEl.classList.remove("ok", "expired");
@@ -396,7 +398,6 @@ listEl.addEventListener("input", (event) => {
       limitPercent: clamp(numeric, 0, 100),
       lastUsed: Date.now()
     });
-    saveItems();
 
     const currentCard = target.closest(".card");
     if (!currentCard) {
@@ -415,6 +416,69 @@ listEl.addEventListener("input", (event) => {
       summaryProgressFill.style.width = `${clamp(numeric, 0, 100)}%`;
     }
   }
+});
+
+listEl.addEventListener("pointerdown", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement)) {
+    return;
+  }
+  if (target.getAttribute("data-action") !== "set-limit") {
+    return;
+  }
+  const card = target.closest(".card");
+  const id = card?.getAttribute("data-id");
+  if (id) {
+    draggingLimitIds.add(id);
+  }
+});
+
+listEl.addEventListener("pointerup", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement)) {
+    return;
+  }
+  if (target.getAttribute("data-action") !== "set-limit") {
+    return;
+  }
+  const card = target.closest(".card");
+  const id = card?.getAttribute("data-id");
+  if (id) {
+    draggingLimitIds.delete(id);
+  }
+  saveItems();
+});
+
+listEl.addEventListener("pointercancel", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement)) {
+    return;
+  }
+  if (target.getAttribute("data-action") !== "set-limit") {
+    return;
+  }
+  const card = target.closest(".card");
+  const id = card?.getAttribute("data-id");
+  if (id) {
+    draggingLimitIds.delete(id);
+  }
+  saveItems();
+});
+
+listEl.addEventListener("change", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement)) {
+    return;
+  }
+  if (target.getAttribute("data-action") !== "set-limit") {
+    return;
+  }
+  const card = target.closest(".card");
+  const id = card?.getAttribute("data-id");
+  if (id) {
+    draggingLimitIds.delete(id);
+  }
+  saveItems();
 });
 
 loadState();
