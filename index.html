@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free CodeX Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <h1>Free CodeX Tracker</h1>
+      <p>Optimized untuk device 6.67" (1080x2400) - local only</p>
+    </header>
+
+    <section class="add-panel" aria-label="Tambah email">
+      <form id="add-form">
+        <label for="email-input">Email</label>
+        <div class="add-row">
+          <input
+            id="email-input"
+            type="text"
+            placeholder="isi nama email / akun bebas"
+            required
+            autocomplete="off"
+          />
+          <button type="submit">Tambah</button>
+        </div>
+      </form>
+    </section>
+
+    <details class="settings-menu">
+      <summary>Pengaturan</summary>
+      <section class="add-panel token-panel" aria-label="Token planner">
+        <label for="weekly-token-input">Total token / 7 hari</label>
+        <div class="add-row">
+          <input id="weekly-token-input" type="number" min="0" step="1" value="258000" />
+        </div>
+        <div class="token-stats">
+          <p><strong>Per hari:</strong> <span id="token-per-day">-</span> token</p>
+          <p><strong>Per jam:</strong> <span id="token-per-hour">-</span> token</p>
+        </div>
+      </section>
+    </details>
+
+    <section>
+      <ul id="email-list" class="email-list" aria-live="polite"></ul>
+      <p id="empty-state" class="empty-state">Belum ada data email.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
